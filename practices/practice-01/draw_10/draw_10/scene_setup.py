@@ -27,7 +27,7 @@ def main(args=None):
 
         for name, x, heading in (
             ('digit_one', 3.0, -math.pi / 2),
-            ('digit_two', 6.0, 0.0),
+            ('digit_zero', 6.0, 0.0),
         ):
             request = Spawn.Request(x=x, y=8.0, theta=heading, name=name)
             future = spawn.call_async(request)

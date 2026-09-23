@@ -14,15 +14,16 @@ def angle_error(target, current):
 
 
 # Each (absolute heading in radians, length) is a straight segment.
-# Turtle positions are set by scene_setup: 1 begins at (3, 8), 2 at (6, 8).
+# Turtle positions are set by scene_setup: 1 begins at (3, 8), 0 at (6, 8).
 SEGMENTS = {
     1: [(-math.pi / 2, 3.0), (-math.pi / 2, 3.0)],
-    2: [
+    0: [
         (0.0, 3.0),             # top: left to right
         (-math.pi / 2, 3.0),    # upper right
-        (math.pi, 3.0),         # middle: right to left
-        (-math.pi / 2, 3.0),    # lower left
-        (0.0, 3.0),             # bottom: left to right
+        (-math.pi / 2, 3.0),    # lower right
+        (math.pi, 3.0),         # bottom: right to left
+        (math.pi / 2, 3.0),     # lower left
+        (math.pi / 2, 3.0),     # upper left
     ],
 }
 

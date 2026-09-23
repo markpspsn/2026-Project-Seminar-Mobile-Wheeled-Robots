@@ -6,7 +6,7 @@ from glob import glob
 from setuptools import setup
 
 
-package_name = 'draw_12'
+package_name = 'draw_10'
 
 setup(
     name=package_name,
@@ -21,10 +21,10 @@ setup(
     zip_safe=True,
     maintainer='Arseniy Mukhometov',
     maintainer_email='235694859+markpspsn@users.noreply.github.com',
-    description='Pose based turtlesim drawing of variant 12',
+    description='Pose based turtlesim drawing of variant 10',
     license='Apache-2.0',
     entry_points={'console_scripts': [
-        'digit_drawer = draw_12.digit_drawer:main',
-        'scene_setup = draw_12.scene_setup:main',
+        'digit_drawer = draw_10.digit_drawer:main',
+        'scene_setup = draw_10.scene_setup:main',
     ]},
 )

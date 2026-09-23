@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="3">
-  <name>draw_12</name>
+  <name>draw_10</name>
   <version>0.0.1</version>
-  <description>Draw variant 12 with two turtlesim turtles and pose feedback.</description>
+  <description>Draw variant 10 with two turtlesim turtles and pose feedback.</description>
   <maintainer email="235694859+markpspsn@users.noreply.github.com">Arseniy Mukhometov</maintainer>
   <license>Apache-2.0</license>
   <buildtool_depend>ament_python</buildtool_depend>
