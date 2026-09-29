@@ -1,29 +1,41 @@
-"""Draw one digit with one turtlesim turtle, using its measured pose."""
-
 import math
-
 import rclpy
 from geometry_msgs.msg import Twist
 from rclpy.node import Node
 from turtlesim.msg import Pose
 
 
-def angle_error(target, current):
-    """Signed shortest turn to the absolute heading, in radians."""
-    return math.atan2(math.sin(target - current), math.cos(target - current))
+ANGLE_TOLERANCE = 0.01
+DISTANCE_TOLERANCE = 0.03
+TURN_GAIN = 6.0
+MAX_TURN = 2.0
+LINEAR_GAIN = 2.0
+MAX_LINEAR = 1.0
+HEADING_GAIN = 4.0
+MAX_CORRECTION = 0.35
 
 
-# Each (absolute heading in radians, length) is a straight segment.
-# Turtle positions are set by scene_setup: 1 begins at (3, 8), 0 at (6, 8).
+def wrap_to_pi(angle):
+    while angle > math.pi:
+        angle -= 2.0 * math.pi
+    while angle < -math.pi:
+        angle += 2.0 * math.pi
+    return angle
+
+
+def clamp(value, minimum, maximum):
+    return max(minimum, min(maximum, value))
+
+
 SEGMENTS = {
-    1: [(-math.pi / 2, 3.0), (-math.pi / 2, 3.0)],
+    1: [
+        (-math.pi / 2, 6.0),
+    ],
     0: [
-        (0.0, 3.0),             # top: left to right
-        (-math.pi / 2, 3.0),    # upper right
-        (-math.pi / 2, 3.0),    # lower right
-        (math.pi, 3.0),         # bottom: right to left
-        (math.pi / 2, 3.0),     # lower left
-        (math.pi / 2, 3.0),     # upper left
+        (0.0, 3.0),
+        (-math.pi / 2, 6.0),
+        (math.pi, 3.0),
+        (math.pi / 2, 6.0),
     ],
 }
 
@@ -36,67 +48,85 @@ class DigitDrawer(Node):
 
         turtle = self.get_parameter('turtle').value
         digit = int(self.get_parameter('digit').value)
+
         if digit not in SEGMENTS:
-            raise ValueError(f'Only digits {list(SEGMENTS)} are defined; got {digit}')
+            raise ValueError(f'Unsupported digit: {digit}')
 
         self.segments = SEGMENTS[digit]
+        self.pose = None
         self.index = 0
         self.phase = 'turn'
         self.start = None
-        self.pose = None
-
+        self.finished = False
         self.publisher = self.create_publisher(Twist, f'/{turtle}/cmd_vel', 10)
         self.subscription = self.create_subscription(
             Pose, f'/{turtle}/pose', self.on_pose, 10
         )
         self.timer = self.create_timer(0.05, self.on_timer)
-        self.get_logger().info(f'Drawing {digit} with {turtle}')
 
     def on_pose(self, pose):
         self.pose = pose
 
+    def publish_stop(self):
+        self.publisher.publish(Twist())
+
     def on_timer(self):
-        cmd = Twist()
-        if self.pose is None or self.index == len(self.segments):
-            self.publisher.publish(cmd)
+        if self.pose is None or self.finished:
+            self.publish_stop()
             return
 
         heading, length = self.segments[self.index]
 
         if self.phase == 'turn':
-            error = angle_error(heading, self.pose.theta)
-            if abs(error) < 0.03:
-                self.phase = 'drive'
+            error = wrap_to_pi(heading - self.pose.theta)
+            if abs(error) <= ANGLE_TOLERANCE:
+                self.publish_stop()
                 self.start = (self.pose.x, self.pose.y)
-            else:
-                cmd.angular.z = max(-2.0, min(2.0, 4.0 * error))
-        else:
-            distance = math.hypot(
-                self.pose.x - self.start[0], self.pose.y - self.start[1]
-            )
-            remaining = length - distance
-            if remaining <= 0.04:
-                self.index += 1
-                self.phase = 'turn'
-                self.start = None
-                if self.index == len(self.segments):
-                    self.get_logger().info('Digit completed; publishing zero velocity')
-            else:
-                cmd.linear.x = min(1.2, 2.0 * remaining)
+                self.phase = 'drive'
+                return
 
-        # A zero Twist at each phase transition stops the previous motion.
-        self.publisher.publish(cmd)
+            command = Twist()
+            command.angular.z = clamp(TURN_GAIN * error, -MAX_TURN, MAX_TURN)
+            self.publisher.publish(command)
+            return
+
+        distance = math.hypot(
+            self.pose.x - self.start[0],
+            self.pose.y - self.start[1],
+        )
+        remaining = length - distance
+        if remaining <= DISTANCE_TOLERANCE:
+            self.publish_stop()
+            self.index += 1
+            self.phase = 'turn'
+            if self.index == len(self.segments):
+                self.finished = True
+            return
+
+        error = wrap_to_pi(heading - self.pose.theta)
+        command = Twist()
+        command.linear.x = min(MAX_LINEAR, LINEAR_GAIN * remaining)
+        command.angular.z = clamp(
+            HEADING_GAIN * error, -MAX_CORRECTION, MAX_CORRECTION
+        )
+        self.publisher.publish(command)
 
 
 def main(args=None):
     rclpy.init(args=args)
+
     node = DigitDrawer()
+
     try:
         rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
     finally:
-        node.publisher.publish(Twist())
+        if rclpy.ok():
+            node.publish_stop()
         node.destroy_node()
-        rclpy.shutdown()
+        if rclpy.ok():
+            rclpy.shutdown()
 
 
 if __name__ == '__main__':
