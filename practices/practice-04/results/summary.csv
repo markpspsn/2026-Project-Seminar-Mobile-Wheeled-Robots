@@ -1,0 +1,7 @@
+run_name,localization_mode,min_particles,max_particles,error_x_m,error_y_m,error_yaw_rad,duration_s,convergence_time_s,samples
+initial_small_low,initial,500,1000,0.1,-0.1,0.2,240.0,5.664,2046
+initial_small_high,initial,500,10000,0.1,-0.1,0.2,240.0,1.3439999999999994,2040
+initial_large_low,initial,500,1000,0.5,0.5,1.0,240.0,5.792000000000002,1795
+initial_large_high,initial,500,10000,0.5,0.5,1.0,240.0,7.263999999999999,2074
+global_low,global,500,1000,0.1,-0.1,0.2,240.0,,1823
+global_high,global,500,10000,0.1,-0.1,0.2,240.0,27.072000000000003,1923

@@ -1,0 +1,106 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+  - Class: rviz_common/Time
+    Name: Time
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Grid
+      Enabled: true
+      Cell Size: 0.5
+      Plane Cell Count: 14
+      Color: 140; 140; 140
+      Alpha: 0.3
+    - Class: rviz_default_plugins/Map
+      Name: Map
+      Enabled: true
+      Alpha: 0.8
+      Draw Behind: true
+      Topic:
+        Value: /map
+        Depth: 1
+        Reliability Policy: Reliable
+        Durability Policy: Transient Local
+    - Class: rviz_default_plugins/LaserScan
+      Name: LaserScan
+      Enabled: true
+      Topic:
+        Value: /scan
+        Depth: 10
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+      Color Transformer: FlatColor
+      Color: 255; 0; 0
+      Style: Flat Squares
+      Size (m): 0.02
+      Decay Time: 0
+    - Class: rviz_default_plugins/RobotModel
+      Name: RobotModel
+      Enabled: true
+      Description Source: Topic
+      Description Topic:
+        Value: /robot_description
+        Reliability Policy: Reliable
+        Durability Policy: Transient Local
+    - Class: rviz_default_plugins/PoseWithCovariance
+      Name: AMCL pose
+      Enabled: true
+      Topic:
+        Value: /amcl_pose
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+      Shape: Arrow
+      Color: 255; 140; 0
+      Shaft Length: 0.4
+      Head Length: 0.15
+    - Class: rviz_default_plugins/TF
+      Name: TF
+      Enabled: true
+      Marker Scale: 0.4
+      Show Names: true
+      Frames:
+        All Enabled: false
+        map:
+          Value: true
+        base_link:
+          Value: true
+        base_link_gt:
+          Value: true
+    - Class: nav2_rviz_plugins/ParticleCloud
+      Name: ParticleCloud
+      Enabled: true
+      Color: 0; 80; 255
+      Shape: Arrow (Flat)
+      Min Arrow Length: 0.02
+      Max Arrow Length: 0.12
+      Topic:
+        Value: /particle_cloud
+        Depth: 5
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+  Global Options:
+    Fixed Frame: map
+    Background Color: 48; 48; 48
+    Frame Rate: 30
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/SetInitialPose
+  Views:
+    Current:
+      Class: rviz_default_plugins/TopDownOrtho
+      Target Frame: map
+      Scale: 85
+      Angle: 0
+      X: 0
+      Y: 0
+Window Geometry:
+  Width: 1280
+  Height: 850
+  X: 50
+  Y: 50
+  Hide Right Dock: true
+  QMainWindow State: 000000ff00000000fd00000004000000000000020d000004b7fc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003b000004b7000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f000004b7fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000003b000004b7000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e1000001970000000300000a000000003efc0100000002fb0000000800540069006d0065010000000000000a000000025300fffffffb0000000800540069006d00650100000000000004500000000000000000000006d8000004b700000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000

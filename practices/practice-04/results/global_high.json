@@ -1,0 +1,17 @@
+{
+  "localization_mode": "global",
+  "error_x": 0.1,
+  "error_y": -0.1,
+  "error_yaw": 0.2,
+  "min_particles": 500,
+  "max_particles": 10000,
+  "duration": 240.0,
+  "position_threshold": 0.15,
+  "angle_threshold": 0.15,
+  "confirmation_time": 10.0,
+  "results_dir": "/home/arsmuha/practices_ws/src/practice-04/results",
+  "run_name": "global_high",
+  "start_time_s": 12.704,
+  "samples": 1923,
+  "convergence_time_s": 27.072000000000003
+}
