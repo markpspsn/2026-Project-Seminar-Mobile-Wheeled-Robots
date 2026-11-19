@@ -222,4 +222,4 @@ angle_threshold:=0.15 confirmation_time:=10.0`. Каталог задаётся 
 
 ## Видеозапись
 
-[PS, Практика 4, Мухаммедов Арсений](https://drive.google.com/file/d/1EuBpRrxWSRuh5P30GUoTJqFOputA89t2/view?usp=drivesdk)
+[PS, Практика 4, Мухаметов Арсений](https://drive.google.com/file/d/1EuBpRrxWSRuh5P30GUoTJqFOputA89t2/view?usp=drivesdk)
